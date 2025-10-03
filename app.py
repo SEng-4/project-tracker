@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 
 class Task:
     def __init__(self, task_id, name, description, status=0):
@@ -19,9 +19,23 @@ class Task:
 
 app = Flask(__name__)
 
+tasks = []
+next_id = 0
+
+def create_task(name, description, status):
+    global next_id
+    task = Task(next_id, name, description, status)
+    tasks.append(task)
+    next_id += 1
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    create_task("Test Task", "Testing if this works...", 1)
+    return render_template('index.html', tasks=tasks)
+
+@app.route('/tasks', methods=["GET"])
+def list_tasks():
+    return jsonify([task.to_dict() for task in tasks])
 
 if __name__ == ('__main__'):
     app.run()
