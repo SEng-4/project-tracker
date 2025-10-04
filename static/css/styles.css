@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.task {
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.task h3 {
+    margin-top: 0;
+}
+
+.status-0 {
+    background-color: #ffebee;
+}
+
+.status-1 {
+    background-color: #fff3e0;
+}
+
+.status-2 {
+    background-color: #e8f5e8;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
