@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!--when not using flask use <link rel="stylesheet" href="../static/css/styles.css">-->>
     <title>Project Tracker</title>
 </head>
 <body>
@@ -11,6 +12,9 @@
     <div id="task-list">
         <!-- Tasks will be loaded here -->
     </div>
+        <div class="column"><h2>To Do</h2></div>
+        <div class="column"><h2>Doing</h2></div>
+        <div class="column"><h2>Done</h2></div>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>
