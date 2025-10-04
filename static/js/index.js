@@ -1,9 +1,9 @@
+const container = document.getElementById('task-list');
+
 function loadTasks() {
     fetch('/tasks')
         .then(response => response.json())
         .then(tasks => {
-            const container = document.getElementById('task-list');
-
             if (tasks.length === 0) {
                 container.innerHTML = '<p>No tasks found.</p>';
                 return;
@@ -26,7 +26,7 @@ function loadTasks() {
         })
         .catch(error => {
             console.error('Error fetching tasks:', error);
-            document.getElementById('tasks-container').innerHTML = '<p>Error loading tasks.</p>';
+            container.innerHTML = '<p>Error loading tasks.</p>';
         });
 }
 
