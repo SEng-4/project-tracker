@@ -12,9 +12,11 @@
     <div id="task-list">
         <!-- Tasks will be loaded here -->
     </div>
-        <div class="column"><h2>To Do</h2></div>
-        <div class="column"><h2>Doing</h2></div>
-        <div class="column"><h2>Done</h2></div>
+        <div class="row">
+            <div class="column">To Do</div>
+            <div class="column">Doing</div>
+            <div class="column">Done</div>
+        </div>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>
