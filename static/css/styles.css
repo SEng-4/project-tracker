@@ -4,7 +4,7 @@ body {
 }
 
 .task {
-    border: 1px solid #ccc;
+    border: 1px solid white;
     margin: 10px 0;
     padding: 15px;
     border-radius: 5px;
@@ -15,15 +15,15 @@ body {
 }
 
 .status-0 {
-    background-color: #ffebee;
+    background-color: white;
 }
 
 .status-1 {
-    background-color: #fff3e0;
+    background-color: white;
 }
 
 .status-2 {
-    background-color: #e8f5e8;
+    background-color: white;
 }
 
 button {
@@ -49,4 +49,38 @@ button:hover {
 }
 .column:hover{
     background-color: #f39406;
+}
+
+/* Floating Create Task Button */
+.floating-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 140px;
+    height: 60px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.floating-btn:hover {
+    background-color: #218838;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.floating-btn span {
+    font-size: 20px;
+    font-weight: bold;
 }

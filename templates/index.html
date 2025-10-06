@@ -17,6 +17,13 @@
             <div class="column" id="doing">Doing</div>
             <div class="column" id="done">Done</div>
         </div>
+    
+    <!-- Floating Create Task Button -->
+    <button id="floating-create-btn" class="floating-btn" onclick="createTask()">
+        <span>+</span>
+        Create Task
+    </button>
+    
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>
