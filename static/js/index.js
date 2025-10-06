@@ -41,8 +41,3 @@ function getStatusText(status) {
         default: return 'Unknown';
     }
 }
-
-function createTask() {
-    //Temporary alert for button click replace with actual functionality later
-    alert('Create Task functionality will be implemented here!');
-}
