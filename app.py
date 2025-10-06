@@ -40,4 +40,4 @@ def list_tasks():
     return jsonify([task.to_dict() for task in tasks])
 
 if __name__ == ('__main__'):
-    app.run()
+    app.run(debug=True)
