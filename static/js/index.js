@@ -9,20 +9,25 @@ function loadTasks() {
                 return;
             }
 
-            let html = '<h2>Tasks:</h2>';
             tasks.forEach(task => {
                 const statusText = getStatusText(task.status);
-                html += `
-                            <div class="task status-${task.status}">
-                                <h3>${task.name}</h3>
-                                <p><strong>Description:</strong> ${task.description}</p>
-                                <p><strong>Status:</strong> ${statusText}</p>
-                                <p><strong>ID:</strong> ${task.id}</p>
-                            </div>
-                        `;
-            });
+                const taskHtml = `
+                    <div class="task status-${task.status}">
+                        <h3>${task.name}</h3>
+                        <p>Description: ${task.description}</p>
+                        <p>Status: ${statusText}</p>
+                        <p><strong> Unique ID:</strong> ${task.id}</p>
+                    </div>
+                    `
 
-            container.innerHTML = html;
+                if (task.status === 0) {
+                    document.getElementById('to_do').innerHTML += taskHtml;
+                } else if (task.status === 1) {
+                    document.getElementById('doing').innerHTML += taskHtml;
+                } else if (task.status === 2) {
+                    document.getElementById('done').innerHTML += taskHtml;
+                }
+            });
         })
         .catch(error => {
             console.error('Error fetching tasks:', error);
