@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <!--when not using flask use <link rel="stylesheet" href="../static/css/styles.css">-->
     <title>Project Tracker</title>
 </head>
+
 <body>
     <h1>Project Tracker</h1>
     <!--
@@ -14,19 +16,18 @@
     -->
     <div id="task-list">
         <!-- Tasks will be loaded here -->
+        <div class="column" id="to_do">To Do</div>
+        <div class="column" id="doing">Doing</div>
+        <div class="column" id="done">Done</div>
     </div>
-        <div class="row">
-            <div class="column" id="to_do">To Do</div>
-            <div class="column" id="doing">Doing</div>
-            <div class="column" id="done">Done</div>
-        </div>
-    
+
     <!-- Floating Create Task Button -->
     <button id="floating-create-btn" class="floating-btn" onclick="createTask()">
         <span>+</span>
         Create Task
     </button>
-    
+
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
+
 </html>
