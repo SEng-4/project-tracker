@@ -15,6 +15,8 @@ function loadTasks() {
                     <div class="task status-${task.status}">
                         <h3>${task.name}</h3>
                         <p>Description: ${task.description}</p>
+                        <p>Status: ${statusText}</p>
+                        <p><strong> Unique ID:</strong> ${task.id}</p>
                     </div>
                     `
 
