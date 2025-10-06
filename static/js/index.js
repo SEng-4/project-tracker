@@ -41,3 +41,5 @@ function getStatusText(status) {
         default: return 'Unknown';
     }
 }
+
+document.addEventListener('DOMContentLoaded', loadTasks);

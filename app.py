@@ -30,7 +30,9 @@ def create_task(name, description, status):
 
 @app.route('/')
 def index():
-    create_task("Test Task", "Testing if this works...", 1)
+    create_task("To-Do", "To-Do", 0)
+    create_task("Doing", "Doing", 1)
+    create_task("Done", "Done", 2)
     return render_template('index.html', tasks=tasks)
 
 @app.route('/tasks', methods=["GET"])
