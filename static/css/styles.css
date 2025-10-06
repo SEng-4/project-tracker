@@ -38,16 +38,29 @@ button {
 button:hover {
     background-color: #0056b3;
 }
-.column {    
-    width: 25%;
-    float: left;
-    border: 1px solid black;
-    margin: 10px ;
-    padding: 15px;
-    border-radius: 5px;
-    background-color: #FFD100;
+
+/* Container for the columns */
+#task-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
 }
-.column:hover{
+
+/* Each column scales to fit available space */
+.column {
+    flex: 1 1 30%; /* Grow and shrink with a base width of 30% */
+    min-width: 250px; /* Prevents columns from becoming too narrow */
+    border: 1px solid black;
+    padding: 15px;
+    border-radius: 20px;
+    background-color: #FFD100;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+.column:hover {
     background-color: #f39406;
 }
 
