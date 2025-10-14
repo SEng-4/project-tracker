@@ -33,6 +33,11 @@ function createTask() {
 }
 
 function loadTasks() {
+    // clear old tasks
+    document.getElementById('to_do').innerHTML = 'To Do';
+    document.getElementById('doing').innerHTML = 'Doing';
+    document.getElementById('done').innerHTML = 'Done';
+
     fetch('/list_tasks')
         .then(response => response.json())
         .then(tasks => {
