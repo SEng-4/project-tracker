@@ -1,14 +1,41 @@
+const $ = (selector) => document.querySelector(selector);
+
 const container = document.getElementById('task-list');
 
+function createTask() {
+    alert("No error handling or anything, that's Liam's job for now");
+    let tName = prompt("Enter Task Name");
+    let tDesc = prompt("Enter Description");
+    let tStat = prompt("Enter Status : 1 for To-Do, 2 for Doing, 3 for Done")
+
+    fetch('/create_task', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: tName,
+            description: tDesc,
+            status: tStat
+        })
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("Task created successfully!");
+                loadTasks();
+            } else {
+                console.log("Failed to create task for some reason.");
+            }
+        })
+        .catch(error => {
+            console.error("Error creating task: ", error);
+        })
+}
+
 function loadTasks() {
-    fetch('/tasks')
+    fetch('/list_tasks')
         .then(response => response.json())
         .then(tasks => {
-            if (tasks.length === 0) {
-                container.innerHTML = '<p>No tasks found.</p>';
-                return;
-            }
-
             tasks.forEach(task => {
                 const statusText = getStatusText(task.status);
                 const taskHtml = `
@@ -33,36 +60,6 @@ function loadTasks() {
         });
 }
 
-function createTask() {
-    alert("No error handling or anything, that's Liam's job for now");
-    let tName = prompt("Enter Task Name");
-    let tDesc = prompt("Enter Description");
-    let tStat = prompt("Enter Status : 1 for To-Do, 2 for Doing, 3 for Done")
-    
-    fetch('/create_task', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name: tName,
-            description: tDesc,
-            status: tStat
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Task created successfully!");
-            loadTasks();
-        } else {
-            console.log("Failed to create task for some reason.");
-        }
-    })
-    .catch (error => {
-        console.error("Error creating task: ", error);
-    })
-}
-
 function getStatusText(status) {
     switch (status) {
         case 0: return 'To-Do';
@@ -73,5 +70,5 @@ function getStatusText(status) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-
+    loadTasks();
 });
