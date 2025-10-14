@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, request, jsonify
 
 class Task:
     def __init__(self, task_id, name, description, status=0):
@@ -30,14 +30,20 @@ def create_task(name, description, status):
 
 @app.route('/')
 def index():
-    create_task("To-Do", "To-Do", 0)
-    create_task("Doing", "Doing", 1)
-    create_task("Done", "Done", 2)
     return render_template('index.html', tasks=tasks)
 
 @app.route('/tasks', methods=["GET"])
 def list_tasks():
     return jsonify([task.to_dict() for task in tasks])
+
+@app.route('/create_task', methods=["POST"])
+def create_task_endpoint():
+    data = request.json
+    name = data.get('name')
+    description = data.get('description')
+    status = data.get('status')
+    create_task(name, description, int(status))
+    return jsonify({"message": "Task created successfully."}), 201
 
 if __name__ == ('__main__'):
     app.run(debug=True)
