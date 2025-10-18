@@ -2,6 +2,9 @@ const $ = (selector) => document.querySelector(selector);
 
 const container = document.getElementById('task-list');
 
+
+
+
 function createTask() {
     let tName = prompt("Enter Task Name");
     let tDesc = prompt("Enter Description");
@@ -65,3 +68,18 @@ function loadTasks() {
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
 });
+
+// === Custom Prompt Modal handler
+(function(){
+  const $ = id => document.getElementById(id);
+  const init = () => {
+    const b = $('floating-create-btn'), m = $('customPrompt'),
+          ok = $('prompt-ok'), c = $('prompt-cancel');
+    if (!b || !m) return;
+    b.addEventListener('click', () => m.style.display = 'flex');
+    ok && ok.addEventListener('click', () => m.style.display = 'none');
+    c && c.addEventListener('click', () => m.style.display = 'none');
+    m.addEventListener('click', e => e.target === m && (m.style.display = 'none'));
+  };
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
+})();
