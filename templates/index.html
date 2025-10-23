@@ -7,7 +7,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 
     <title>Project Tracker</title>
@@ -24,29 +25,28 @@
     </div>
 
     <!--
-    Floating Create Task Button 
+    Create Task Button
     -->
     <button id="floating-create-btn" class="floating-btn" onclick="createTask()">
         <span>+</span>
         Create Task
     </button>
 
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-
-
-
-<!-- Custom Prompt Modal,needed to style prompts -->
-<div id="customPrompt" class="prompt-overlay" style="display:none;">
-  <div class="prompt-box">
-    <p id="prompt-message"></p>
-    <input id="prompt-input" type="text" autocomplete="off" />
-    <div class="prompt-buttons">
-      <button id="prompt-ok" class="ok-btn">OK</button>
-      <button id="prompt-cancel" class="cancel-btn">Cancel</button>
+    <!--
+    Create Task Prompt Modal
+    -->
+    <div id="createTaskPrompt" class="prompt-overlay" style="display:none;">
+        <div class="prompt-box">
+            <p id="prompt-message"></p>
+            <input id="prompt-input" type="text" autocomplete="off" />
+            <div class="prompt-buttons">
+                <button id="prompt-ok" class="ok-btn">OK</button>
+                <button id="prompt-cancel" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 
 </body>
 
