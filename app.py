@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 
 class Task:
-    def __init__(self, task_id, name, description, status=0):
+    def __init__(self, task_id, name, description, status=0, user=None):
         self.id = task_id # a unique identifier
         self.name = name
         self.description = description
         self.status = status # 0 = to-do, 1 = doing, 2 = done
+        self.user = user
 
     # Could make life easier in the future by returning tasks
     # in a JSON format, might be good for data storage later
@@ -14,19 +15,52 @@ class Task:
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            "status": self.status
+            "status": self.status,
+            "user": {
+                "id": self.user.id,
+                "username": self.user.username,
+                "first_name": self.user.first_name,
+                "last_name": self.user.last_name
+            } if self.user else None
         }
+
+class User:
+    def __init__(self, user_id, username, first_name, last_name):
+        self.username = username
+        self.id = user_id
+        self.first_name = first_name
+        self.last_name = last_name
 
 app = Flask(__name__)
 
 tasks = []
+users = []
 next_id = 0
 
-def create_task(name, description, status):
+# Create some dummy users for testing
+def create_dummy_users():
+    global users
+    users.append(User(0, "alice_smith", "Alice", "Smith"))
+    users.append(User(1, "bob_johnson", "Bob", "Johnson"))
+    users.append(User(2, "carol_williams", "Carol", "Williams"))
+    users.append(User(3, "david_brown", "David", "Brown"))
+    users.append(User(4, "eve_davis", "Eve", "Davis"))
+
+create_dummy_users()
+
+def create_task(name, description, status, user):
     global next_id
-    task = Task(next_id, name, description, status)
+    task = Task(next_id, name, description, status, user)
     tasks.append(task)
     next_id += 1
+
+# Create a dummy task assigned to Alice
+def create_dummy_task():
+    user = users[0] 
+    create_task("Users", "Make users work", 0, user)
+
+# Initialize dummy data
+create_dummy_task()
 
 @app.route('/')
 def index():
@@ -38,7 +72,8 @@ def create_task_endpoint():
     name = data.get('name')
     description = data.get('description')
     status = data.get('status')
-    create_task(name, description, int(status))
+    user = data.get('user')
+    create_task(name, description, int(status), user)
     return jsonify({"message": "Task created successfully."}), 201
 
 @app.route('/list_tasks', methods=["GET"])
