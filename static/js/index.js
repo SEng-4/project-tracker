@@ -81,7 +81,9 @@ function createTask() {
                 });
 
             modalEl.style.display = 'none';
+            // Reset everything
             createTaskState.active = false;
+            setStep(0);
         }
     });
 
