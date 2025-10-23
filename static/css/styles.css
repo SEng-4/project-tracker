@@ -1,6 +1,10 @@
 body {
-    font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #FFFFC5;
+    font-family: "Noto Sans", sans-serif;
+}
+h1{
+    font-family: "Noto Sans", sans-serif;
 }
 
 .task {
@@ -99,3 +103,53 @@ button:hover {
     font-size: 20px;
     font-weight: bold;
 }
+
+
+
+
+/* --- custom prompt modal styles --- */
+.prompt-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.prompt-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 320px;
+  max-width: 90%;
+  box-shadow: 0 8px 30px maroon;
+  text-align: center;
+  font-family: inherit;
+}
+
+.prompt-box #prompt-input {
+  width: 90%;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: 1px solid black;
+  font-size: 14px;
+}
+
+.prompt-buttons {
+  margin-top: 12px;
+}
+
+.prompt-buttons button {
+  margin: 0 6px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.ok-btn { background: green; color: white; }
+.cancel-btn { background: red; color: white; }
+
+/*.ok-btn:focus, .cancel-btn:focus, #prompt-input:focus { outline: 2px}
