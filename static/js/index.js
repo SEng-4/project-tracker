@@ -37,7 +37,7 @@ function createTask() {
     };
 
     // Make setStep globally accessible so I can use it later in startCreateTaskFlow
-    window.setStep = setStep;
+    globalThis.setStep = setStep;
 
     okButtonEl.addEventListener("click", () => {
         let userInput = promptInputEl.value != null ? promptInputEl.value.trim() : '';
@@ -131,7 +131,7 @@ function loadTasks() {
         });
 }
 
-window.startCreateTaskFlow = function startCreateTaskFlow() {
+globalThis.startCreateTaskFlow = function startCreateTaskFlow() {
     createTaskState = { step: 0, name: '', desc: '', status: 0, active: true };
     $("#createTaskPrompt").style.display = 'flex';
     setStep(0);
