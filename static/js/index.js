@@ -29,6 +29,11 @@ function createTask() {
                 promptInputEl.value = '';
                 promptInputEl.placeholder = '0, 1, or 2';
                 break;
+            case 3:
+                promptMsgEl.textContent = 'Enter User (optional)';
+                promptInputEl.value = '';
+                promptInputEl.placeholder = 'Username';
+                break;
             default:
                 break;
         }
@@ -57,7 +62,12 @@ function createTask() {
             setStep(2);
         } else if (createTaskState.step === 2) {
             createTaskState.status = userInput;
-
+            setStep(3);
+        } else if (createTaskState.step === 3) {
+            // Optionally assign user
+            if (userInput) {
+                createTaskState.user = userInput;
+            }
             // Finally create the task
             fetch('/create_task', {
                 method: 'POST',
@@ -108,10 +118,12 @@ function loadTasks() {
         .then(response => response.json())
         .then(tasks => {
             tasks.forEach(task => {
+                const assignedTo = task.user ? `${task.user.first_name} ${task.user.last_name} (${task.user.username})` : 'Unassigned';
                 const taskHtml = `
                     <div class="task status-${task.status}">
                         <h3>${task.name}</h3>
                         <p>Description: ${task.description}</p>
+                        <p class="assigned">Assigned to: ${assignedTo}</p>
                     </div>
                     `
                 if (task.status === 0) {

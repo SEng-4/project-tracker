@@ -72,8 +72,33 @@ def create_task_endpoint():
     name = data.get('name')
     description = data.get('description')
     status = data.get('status')
-    user = data.get('user')
-    create_task(name, description, int(status), user)
+    # Optionally accept a user_id from the client; if provided we'll validate
+    user_id = data.get('user_id')
+
+    # Basic validation
+    if name is None or name == '':
+        return jsonify({"error": "Task name is required."}), 400
+    if status is None or status == '':
+        return jsonify({"error": "Status is required."}), 400
+
+    try:
+        status_int = int(status)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Status must be an integer (0,1,2)."}), 400
+
+    assigned_user = None
+    if user_id is not None and user_id != '':
+        try:
+            user_id_int = int(user_id)
+        except (TypeError, ValueError):
+            return jsonify({"error": "user_id must be an integer."}), 400
+
+        # Find the user by id
+        assigned_user = next((u for u in users if u.id == user_id_int), None)
+        if assigned_user is None:
+            return jsonify({"error": f"No user found with id {user_id_int}."}), 400
+
+    create_task(name, description, status_int, assigned_user)
     return jsonify({"message": "Task created successfully."}), 201
 
 @app.route('/list_tasks', methods=["GET"])
