@@ -105,5 +105,19 @@ def create_task_endpoint():
 def list_tasks():
     return jsonify([task.to_dict() for task in tasks])
 
+
+@app.route('/list_users', methods=["GET"])
+def list_users():
+    # Return a simple JSON list of users (id, username, first_name, last_name)
+    return jsonify([
+        {
+            "id": u.id,
+            "username": u.username,
+            "first_name": u.first_name,
+            "last_name": u.last_name
+        }
+        for u in users
+    ])
+
 if __name__ == ('__main__'):
     app.run(debug=True)

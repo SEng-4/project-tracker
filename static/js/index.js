@@ -2,17 +2,27 @@ const $ = (selector) => document.querySelector(selector);
 const container = document.getElementById('task-list');
 
 function createTask() {
+    // Ensure initialisation happens only once so we don't attach duplicate listeners
+    if (window._createTaskInitialized) {
+        if (typeof startCreateTaskFlow === 'function') startCreateTaskFlow();
+        return;
+    }
+
     let modalEl = $("#createTaskPrompt");
     let promptMsgEl = $("#prompt-message");
     let promptInputEl = $("#prompt-input");
+    let promptSelectEl = $("#prompt-select");
     let okButtonEl = $("#prompt-ok");
     let cancelButtonEl = $("#prompt-cancel");
 
-    // Are we creating a task? What kind of task are we creating?
-    let createTaskState = { step: 0, name: '', desc: '', status: 0, active: false };
+    let createTaskState = { step: 0, name: '', desc: '', status: 0, user_id: '' };
 
     const setStep = (step) => {
         createTaskState.step = step;
+        // Reset visibility
+        promptInputEl.style.display = 'inline-block';
+        promptSelectEl.style.display = 'none';
+
         switch (step) {
             case 0:
                 promptMsgEl.textContent = 'Enter Task Name';
@@ -30,25 +40,51 @@ function createTask() {
                 promptInputEl.placeholder = '0, 1, or 2';
                 break;
             case 3:
-                promptMsgEl.textContent = 'Enter User (optional)';
-                promptInputEl.value = '';
-                promptInputEl.placeholder = 'Username';
+                promptMsgEl.textContent = 'Assign to user (optional)';
+                promptInputEl.style.display = 'none';
+                promptSelectEl.style.display = 'inline-block';
+                promptSelectEl.innerHTML = '';
+                // Add a default unassigned option
+                const unassignedOpt = document.createElement('option');
+                unassignedOpt.value = '';
+                unassignedOpt.textContent = 'Unassigned';
+                promptSelectEl.appendChild(unassignedOpt);
+
+                // Fetch users and populate select
+                fetch('/list_users')
+                    .then(r => r.json())
+                    .then(users => {
+                        users.forEach(u => {
+                            const opt = document.createElement('option');
+                            opt.value = u.id;
+                            opt.textContent = `${u.first_name} ${u.last_name} (${u.username})`;
+                            promptSelectEl.appendChild(opt);
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Failed to load users for select:', err);
+                        // Keep only Unassigned option
+                    });
                 break;
             default:
                 break;
         }
-        // Focus on each step
-        setTimeout(() => promptInputEl.focus(), 0);
     };
 
-    // Make setStep globally accessible so I can use it later in startCreateTaskFlow
+    // Make setStep globally accessible so startCreateTaskFlow can use it
     window.setStep = setStep;
 
     okButtonEl.addEventListener("click", () => {
-        let userInput = promptInputEl.value != null ? promptInputEl.value.trim() : '';
+        let userInput = '';
+        if (createTaskState.step === 3) {
+            // get selected user id (may be empty string)
+            userInput = promptSelectEl.value != null ? promptSelectEl.value : '';
+        } else {
+            userInput = promptInputEl.value != null ? promptInputEl.value.trim() : '';
+        }
 
-        // User has entered nothing
-        if (!userInput) {
+        // For steps 0-2, require input
+        if ((createTaskState.step !== 3) && !userInput) {
             promptInputEl.focus();
             return;
         }
@@ -64,30 +100,34 @@ function createTask() {
             createTaskState.status = userInput;
             setStep(3);
         } else if (createTaskState.step === 3) {
-            // Optionally assign user
-            if (userInput) {
-                createTaskState.user = userInput;
-            }
+            createTaskState.user_id = userInput;
+
             // Finally create the task
+            const payload = {
+                name: createTaskState.name,
+                description: createTaskState.desc,
+                status: createTaskState.status
+            };
+            if (createTaskState.user_id !== '') payload.user_id = createTaskState.user_id;
+
             fetch('/create_task', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    name: createTaskState.name,
-                    description: createTaskState.desc,
-                    status: createTaskState.status
-                })
+                body: JSON.stringify(payload)
             })
                 .then(response => {
                     if (response.ok) {
                         console.log('Task created successfully!');
                         loadTasks();
+                    } else {
+                        return response.json().then(j => Promise.reject(j));
                     }
                 })
                 .catch(error => {
                     console.error('Error creating task: ', error);
+                    if (error && error.error) alert('Error: ' + error.error);
                 });
 
             modalEl.style.display = 'none';
@@ -96,10 +136,11 @@ function createTask() {
     });
 
     cancelButtonEl.addEventListener("click", () => {
-        // Close the damn thing
         modalEl.style.display = 'none';
         createTaskState.active = false;
     });
+
+    window._createTaskInitialized = true;
 
     if (typeof startCreateTaskFlow === 'function') {
         startCreateTaskFlow();
