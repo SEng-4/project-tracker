@@ -1,10 +1,72 @@
+
 body {
     margin: 20px;
     background-color: #FFFFC5;
-    font-family: "Noto Sans", sans-serif;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-style: italic;
+
+    /* rainbow gradient clipped to text (WebKit + fallback) */
+    background-image: linear-gradient(90deg, #e2142b, #ff7f00, #ffea00, #78d42a, #1e90ff, #6a5acd, #ff2bd4);
+    background-size: 200% 100%;
+    background-position: 0% 0%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+
+    /* animated rainbow sweep for a playful retro effect */
+    animation: rainbowShift 8s linear infinite;
+
+    /* layered pixel-y drop shadows to mimic chunky Win95 text */
+    text-shadow:
+      1px 1px 0 #000,
+      2px 2px 0 #111,
+      3px 3px 0 #222,
+      -1px -1px 0 #fff,
+      -2px -2px 0 #eee;
+
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: auto;
 }
+@keyframes rainbowShift {
+  0%   { background-position: 0% 0% }
+  50%  { background-position: 100% 0% }
+  100% { background-position: 0% 0% }
+}
+
 h1{
-    font-family: "Noto Sans", sans-serif;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-style: italic;
+    /* keep heading gradient/shadow consistent */
+    background-image: inherit;
+    background-size: inherit;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: inherit;
+}
+/* ...existing code... */
+marquee {
+    font-weight: bold;
+    font-size: 30px;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-style: italic;
+
+    /* extra punchy shadow for marquee */
+    text-shadow:
+      2px 2px 0 #000,
+      4px 4px 0 #111,
+      6px 6px 0 #222,
+      0 0 6px rgba(255,255,255,0.15);
+
+    background-image: linear-gradient(90deg, #e2142b, #ff7f00, #ffea00, #78d42a, #1e90ff, #6a5acd, #ff2bd4);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
 }
 
 .task {
@@ -172,4 +234,24 @@ button:hover {
 .task .assigned strong {
     font-weight: 600;
     color: #111;
+}
+.prompt-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  overflow: hidden; /* keep bouncing box inside viewport */
+}
+
+/* when bouncing is active we remove centering and allow absolute positioning */
+.prompt-overlay.bouncing {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.prompt-overlay.bouncing .prompt-box {
+  position: absolute;
+  will-change: left, top, transform;
 }

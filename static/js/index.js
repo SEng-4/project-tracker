@@ -191,3 +191,138 @@ window.startCreateTaskFlow = function startCreateTaskFlow() {
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
 });
+
+// Bouncing DVD-style prompt behavior
+(function () {
+    const selector = '#createTaskPrompt';
+    const boxSelector = '.prompt-box';
+    let bounce = {
+        running: false,
+        vx: 0,
+        vy: 0,
+        x: 0,
+        y: 0,
+        raf: null,
+        overlay: null,
+        box: null,
+        speed: 3
+    };
+
+    function randSign() { return Math.random() < 0.5 ? -1 : 1; }
+
+    function startBouncing() {
+        const overlay = document.querySelector(selector);
+        const box = overlay ? overlay.querySelector(boxSelector) : null;
+        if (!overlay || !box) return;
+
+        // stop existing
+        stopBouncing();
+
+        overlay.classList.add('bouncing');
+        overlay.style.pointerEvents = 'auto';
+
+        // initial bounds and position
+        const boundsW = overlay.clientWidth;
+        const boundsH = overlay.clientHeight;
+        const boxW = box.offsetWidth;
+        const boxH = box.offsetHeight;
+
+        // start at a random position inside bounds
+        bounce.x = Math.floor(Math.random() * Math.max(1, boundsW - boxW));
+        bounce.y = Math.floor(Math.random() * Math.max(1, boundsH - boxH));
+
+        // random velocity with chosen speed
+        const s = bounce.speed;
+        bounce.vx = (1 + Math.random()) * s * randSign();
+        bounce.vy = (0.6 + Math.random()) * s * randSign();
+
+        bounce.overlay = overlay;
+        bounce.box = box;
+        bounce.running = true;
+
+        // set initial coordinates
+        box.style.left = bounce.x + 'px';
+        box.style.top = bounce.y + 'px';
+
+        function step() {
+            if (!bounce.running) return;
+            const ow = bounce.overlay.clientWidth;
+            const oh = bounce.overlay.clientHeight;
+            const bw = bounce.box.offsetWidth;
+            const bh = bounce.box.offsetHeight;
+
+            bounce.x += bounce.vx;
+            bounce.y += bounce.vy;
+
+            // collide with left/right
+            if (bounce.x <= 0) {
+                bounce.x = 0;
+                bounce.vx = Math.abs(bounce.vx);
+            } else if (bounce.x + bw >= ow) {
+                bounce.x = Math.max(0, ow - bw);
+                bounce.vx = -Math.abs(bounce.vx);
+            }
+
+            // collide with top/bottom
+            if (bounce.y <= 0) {
+                bounce.y = 0;
+                bounce.vy = Math.abs(bounce.vy);
+            } else if (bounce.y + bh >= oh) {
+                bounce.y = Math.max(0, oh - bh);
+                bounce.vy = -Math.abs(bounce.vy);
+            }
+
+            // apply position
+            bounce.box.style.left = Math.round(bounce.x) + 'px';
+            bounce.box.style.top = Math.round(bounce.y) + 'px';
+
+            bounce.raf = requestAnimationFrame(step);
+        }
+
+        bounce.raf = requestAnimationFrame(step);
+    }
+
+    function stopBouncing() {
+        if (!bounce.running) return;
+        bounce.running = false;
+        if (bounce.raf) cancelAnimationFrame(bounce.raf);
+        if (bounce.overlay) {
+            bounce.overlay.classList.remove('bouncing');
+            // clear inline positioning so original centering returns
+            if (bounce.box) {
+                bounce.box.style.left = '';
+                bounce.box.style.top = '';
+            }
+            bounce.overlay = null;
+            bounce.box = null;
+        }
+    }
+
+    // expose to window so createTask flow can use them
+    window._startPromptBounce = startBouncing;
+    window._stopPromptBounce = stopBouncing;
+
+    // hook into existing start/stop points
+    const origStart = window.startCreateTaskFlow;
+    window.startCreateTaskFlow = function () {
+        if (typeof origStart === 'function') origStart();
+        // small timeout to allow overlay to render and size to stabilize
+        setTimeout(startBouncing, 50);
+    };
+
+    // intercept modal hide points used in createTask: listen for display changes on the overlay
+    const observer = new MutationObserver(muts => {
+        muts.forEach(m => {
+            if (m.attributeName === 'style' && m.target && m.target.id === 'createTaskPrompt') {
+                const el = m.target;
+                const disp = window.getComputedStyle(el).display;
+                if (disp === 'none') stopBouncing();
+            }
+        });
+    });
+    const overlayEl = document.querySelector(selector);
+    if (overlayEl) observer.observe(overlayEl, { attributes: true, attributeFilter: ['style'] });
+
+    // cleanup on page hide
+    window.addEventListener('beforeunload', stopBouncing);
+})();
