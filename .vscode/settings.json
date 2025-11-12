@@ -1,0 +1,11 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "seng-4",
+        "projectKey": "SEng-4_project-tracker"
+    },
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

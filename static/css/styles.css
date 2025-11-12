@@ -1,6 +1,6 @@
 body {
     margin: 20px;
-    background-color: #FFFFC5;
+    background-color: white;
     font-family: "Noto Sans", sans-serif;
 }
 h1{
@@ -49,6 +49,8 @@ button:hover {
     flex-wrap: wrap;
     gap: 20px;
     justify-content: space-between;
+    align-items: flex-start;
+    font-weight: bold;
 }
 
 /* Each column scales to fit available space */
@@ -60,14 +62,14 @@ button:hover {
     border: 1px solid black;
     padding: 15px;
     border-radius: 20px;
-    background-color: #FFD100;
+    background-color: #a4a4a3;
     box-sizing: border-box;
     transition: background-color 0.3s ease;
 }
 
 /* Hover effect */
 .column:hover {
-    background-color: #f39406;
+    background-color: #d7a6cb;
 }
 
 /* Floating Create Task Button */
@@ -173,3 +175,15 @@ button:hover {
     font-weight: 600;
     color: #111;
 }
+#to_do .task{
+    background-color: #f05757;
+}
+#doing .task{
+    background-color: #f2ca46;
+}
+
+#done .task{
+    background-color: #64f594;
+
+}
+/*.ok-btn:focus, .cancel-btn:focus, #prompt-input:focus { outline: 2px}

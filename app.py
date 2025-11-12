@@ -101,6 +101,17 @@ def create_task_endpoint():
     create_task(name, description, status_int, assigned_user)
     return jsonify({"message": "Task created successfully."}), 201
 
+@app.route('/update_task', methods=["POST"])
+def update_task_endpoint():
+    data = request.json
+    task_id = int(data.get("id"))
+    status = int(data.get("status"))
+    for task in tasks:
+        if task.id == task_id:
+            task.status = status
+            return jsonify({"message": "Task updated successfully.", "task": task.to_dict()}), 200
+    return jsonify({"error": "Task not found."}), 404
+
 @app.route('/list_tasks', methods=["GET"])
 def list_tasks():
     return jsonify([task.to_dict() for task in tasks])
