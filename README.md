@@ -1,3 +1,7 @@
+**Note:** As of 05/01/2026, we've re-written the back-end using Spring Boot. This branch (`flask-legacy`) remains for historical purposes, but no changes will be happening here. All the work is in [`main`](https://github.com/SEng-4/project-tracker/tree/main).
+
+---
+
 # Project Tracker
 
 ## Setup Instructions
